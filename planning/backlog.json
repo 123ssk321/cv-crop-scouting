@@ -1,0 +1,347 @@
+{
+  "project_slug": "crop-scouting",
+  "project_name": "Crop Scouting",
+  "track": "high",
+  "first_public_result_month": 7,
+  "total_hours": 800,
+  "reserve_hours": 160,
+  "milestones": [
+    {
+      "id": "M1",
+      "title": "Month 1 — scope and reproducibility",
+      "description": "40h work + 10h reserve; freeze rights, contracts, holdouts, and environment."
+    },
+    {
+      "id": "M2",
+      "title": "Month 4 — baseline evidence",
+      "description": "160h work + 40h reserve; runnable data and baseline pipeline with leakage controls."
+    },
+    {
+      "id": "M3",
+      "title": "Month 7 — first functional public release",
+      "description": "160h work + 40h reserve; cumulative 360h work + 90h reserve; usable replay, evaluation, exports and install instructions."
+    },
+    {
+      "id": "M4",
+      "title": "Month 10 — robustness and deployment",
+      "description": "160h work + 40h reserve; hardening, integration, workflow validation and operational packaging."
+    },
+    {
+      "id": "M5",
+      "title": "By month 12 — maintained handoff",
+      "description": "120h work + 30h reserve; security, release, maintenance rehearsal and final scope decision; 800h total."
+    }
+  ],
+  "issues": [
+    {
+      "id": "CS-001",
+      "title": "Freeze scouting decision and exclusions",
+      "body": "Output: docs/scope.md and docs/evidence-tiers.md. Steps: define corn-region scouting jobs, no-diagnosis wording and public-data technical finish. Acceptance: no deliverable depends on a farm partner, field visit or treatment recommendation. Test: walk high-rank, insufficient-data and unavailable-crop-identity scenarios. Dependencies: none; use the approved proposal and implementation protocol. Record commands, pinned inputs, observed results and remaining limitations in the output evidence. Keep all data provenance attached and do not introduce manual annotation. Stop at the stated deliverable; any scope or interface change requires the protocol's design review.",
+      "estimate_hours": 8,
+      "milestone": "M1",
+      "depends_on": [],
+      "labels": [
+        "type:task",
+        "project:crop-scouting"
+      ],
+      "phase": "definition"
+    },
+    {
+      "id": "CS-002",
+      "title": "Select public inputs and rights",
+      "body": "Output: data/licenses/manifest.json and data/study-area.json. Steps: record Sentinel and NASS terms; choose bounded study areas and completed seasons; exclude restricted datasets. Acceptance: all inputs have provenance and no private boundary or manual label dependency. Test: specify unavailable-source fallback and rejection of restricted dataset entries. Dependencies: CS-001. Record commands, pinned inputs, observed results and remaining limitations in the output evidence. Keep all data provenance attached and do not introduce manual annotation. Stop at the stated deliverable; any scope or interface change requires the protocol's design review.",
+      "estimate_hours": 8,
+      "milestone": "M1",
+      "depends_on": [
+        "CS-001"
+      ],
+      "labels": [
+        "type:task",
+        "project:crop-scouting"
+      ],
+      "phase": "definition"
+    },
+    {
+      "id": "CS-003",
+      "title": "Freeze temporal and geographic contracts",
+      "body": "Output: schemas/observation.json, schemas/score.json and evaluation/splits.json. Steps: define as_of availability, mask-year semantics, spatial buffers and sealed seasons. Acceptance: future annual masks cannot enter operational replay and spatial groups remain disjoint. Test: test future timestamps, overlapping tiles and hindsight-view labeling. Dependencies: CS-001, CS-002. Record commands, pinned inputs, observed results and remaining limitations in the output evidence. Keep all data provenance attached and do not introduce manual annotation. Stop at the stated deliverable; any scope or interface change requires the protocol's design review.",
+      "estimate_hours": 12,
+      "milestone": "M1",
+      "depends_on": [
+        "CS-001",
+        "CS-002"
+      ],
+      "labels": [
+        "type:task",
+        "project:crop-scouting"
+      ],
+      "phase": "definition"
+    },
+    {
+      "id": "CS-004",
+      "title": "Define raster environment and budgets",
+      "body": "Output: docs/environment.md and tests/contracts/test_bootstrap.py. Steps: pin CPU geospatial dependencies, grid conventions and cache limits; define generated offline fixture. Acceptance: the planned pipeline runs without drones, private accounts or GPU hardware. Test: specify CRS alignment, band scaling and local fixture import smoke checks. Dependencies: CS-003. Record commands, pinned inputs, observed results and remaining limitations in the output evidence. Keep all data provenance attached and do not introduce manual annotation. Stop at the stated deliverable; any scope or interface change requires the protocol's design review.",
+      "estimate_hours": 12,
+      "milestone": "M1",
+      "depends_on": [
+        "CS-003"
+      ],
+      "labels": [
+        "type:task",
+        "project:crop-scouting"
+      ],
+      "phase": "definition"
+    },
+    {
+      "id": "CS-005",
+      "title": "Build resumable public-data ingestion",
+      "body": "Output: src/ingest/ and data/manifests/. Before implementation, split this epic into four 10h children, redistributing its 40h estimate: STAC queries; provenance caching; NASS adapter; resumable download control. Acceptance: available_at and acquired_at remain distinct and retrieval stays inside declared caps. Test: test source outages, pagination, corrupt assets and denied redistribution flags. Dependencies: CS-002, CS-003, CS-004. Complete children in the listed order; each must include its relevant test and evidence in the output directory. Record versions, commands, inputs and limitations. Do not count child estimates again or spend reserve without a milestone decision.",
+      "estimate_hours": 40,
+      "milestone": "M2",
+      "depends_on": [
+        "CS-002",
+        "CS-003",
+        "CS-004"
+      ],
+      "labels": [
+        "type:epic",
+        "project:crop-scouting"
+      ],
+      "phase": "baseline"
+    },
+    {
+      "id": "CS-006",
+      "title": "Build quality-aware raster pipeline",
+      "body": "Output: src/preprocess/ and reports/preprocessing/. Before implementation, split this epic into four 10h children, redistributing its 40h estimate: band normalization; common-grid reprojection; quality masks; crop-region construction. Acceptance: outputs retain source references and crop-mask regions are not called verified fields. Test: test nodata boundaries, mixed pixels, resampling and scale-factor errors. Dependencies: CS-005. Complete children in the listed order; each must include its relevant test and evidence in the output directory. Record versions, commands, inputs and limitations. Do not count child estimates again or spend reserve without a milestone decision.",
+      "estimate_hours": 40,
+      "milestone": "M2",
+      "depends_on": [
+        "CS-005"
+      ],
+      "labels": [
+        "type:epic",
+        "project:crop-scouting"
+      ],
+      "phase": "baseline"
+    },
+    {
+      "id": "CS-007",
+      "title": "Implement seasonal deviation baseline",
+      "body": "Output: src/scoring/ and reports/baseline/. Before implementation, split this epic into four 10h children, redistributing its 40h estimate: historical windows; robust normalization; persistence scoring; simple-change comparator. Acceptance: ranking uses past available data only and exposes every score component. Test: test seasonal offsets, zero dispersion, missing history and future-data leakage. Dependencies: CS-003, CS-006. Complete children in the listed order; each must include its relevant test and evidence in the output directory. Record versions, commands, inputs and limitations. Do not count child estimates again or spend reserve without a milestone decision.",
+      "estimate_hours": 40,
+      "milestone": "M2",
+      "depends_on": [
+        "CS-003",
+        "CS-006"
+      ],
+      "labels": [
+        "type:epic",
+        "project:crop-scouting"
+      ],
+      "phase": "baseline"
+    },
+    {
+      "id": "CS-008",
+      "title": "Generate labeled temporal stress fixtures",
+      "body": "Output: src/generation/ and fixtures/temporal/. Before implementation, split this epic into four 10h children, redistributing its 40h estimate: base phenology; anomaly injection; cloud and gap simulation; held-out family manifests. Acceptance: synthetic labels are automatic and different regimes remain isolated across splits. Test: verify known amplitude, duration and valid-observation counts against generated truth. Dependencies: CS-003, CS-006. Complete children in the listed order; each must include its relevant test and evidence in the output directory. Record versions, commands, inputs and limitations. Do not count child estimates again or spend reserve without a milestone decision.",
+      "estimate_hours": 40,
+      "milestone": "M2",
+      "depends_on": [
+        "CS-003",
+        "CS-006"
+      ],
+      "labels": [
+        "type:epic",
+        "project:crop-scouting"
+      ],
+      "phase": "baseline"
+    },
+    {
+      "id": "CS-009",
+      "title": "Build sealed evaluation and calibration",
+      "body": "Output: evaluation/run.py and reports/evaluation/. Before implementation, split this epic into four 10h children, redistributing its 40h estimate: synthetic metrics; threshold selection; region bootstrap; public-data stability checks. Acceptance: synthetic detection performance is separate from real pipeline quality and unlabeled observations. Test: test perfect detection, unchanged controls, spatial leakage and missing-data abstention. Dependencies: CS-007, CS-008. Complete children in the listed order; each must include its relevant test and evidence in the output directory. Record versions, commands, inputs and limitations. Do not count child estimates again or spend reserve without a milestone decision.",
+      "estimate_hours": 40,
+      "milestone": "M3",
+      "depends_on": [
+        "CS-007",
+        "CS-008"
+      ],
+      "labels": [
+        "type:epic",
+        "project:crop-scouting"
+      ],
+      "phase": "public-release"
+    },
+    {
+      "id": "CS-010",
+      "title": "Implement evidence and abstention logic",
+      "body": "Output: src/evidence/ and reports/abstention/. Before implementation, split this epic into four 10h children, redistributing its 40h estimate: coverage rules; history requirements; reason codes; score-to-source linkage. Acceptance: insufficient data suppresses ranking and every accepted score links its observation history. Test: test cloud gaps, absent crop identity and annual-mask release after as_of. Dependencies: CS-007, CS-009. Complete children in the listed order; each must include its relevant test and evidence in the output directory. Record versions, commands, inputs and limitations. Do not count child estimates again or spend reserve without a milestone decision.",
+      "estimate_hours": 40,
+      "milestone": "M3",
+      "depends_on": [
+        "CS-007",
+        "CS-009"
+      ],
+      "labels": [
+        "type:epic",
+        "project:crop-scouting"
+      ],
+      "phase": "public-release"
+    },
+    {
+      "id": "CS-011",
+      "title": "Build scouting map and exports",
+      "body": "Output: src/api/, web/ and src/export/. Before implementation, split this epic into four 10h children, redistributing its 40h estimate: as_of API; ranked map; trend evidence; GeoJSON and CSV export. Acceptance: users see crop-mask boundaries, hindsight labels and non-diagnostic explanations throughout. Test: test rank consistency, geometry validity, source links and missing-data display. Dependencies: CS-010. Complete children in the listed order; each must include its relevant test and evidence in the output directory. Record versions, commands, inputs and limitations. Do not count child estimates again or spend reserve without a milestone decision.",
+      "estimate_hours": 40,
+      "milestone": "M3",
+      "depends_on": [
+        "CS-010"
+      ],
+      "labels": [
+        "type:epic",
+        "project:crop-scouting"
+      ],
+      "phase": "public-release"
+    },
+    {
+      "id": "CS-012",
+      "title": "Deliver functional public release",
+      "body": "Output: release/v0.1/ and reports/m3/. Before implementation, split this epic into four 10h children, redistributing its 40h estimate: offline package; public-data recipe; frozen evaluation; limitations and quickstart. Acceptance: month-seven release supports date selection through traceable scouting export without credentials. Test: execute generated demo end to end and reproduce cleared cached real-data reports. Dependencies: CS-009, CS-011. Complete children in the listed order; each must include its relevant test and evidence in the output directory. Record versions, commands, inputs and limitations. Do not count child estimates again or spend reserve without a milestone decision.",
+      "estimate_hours": 40,
+      "milestone": "M3",
+      "depends_on": [
+        "CS-009",
+        "CS-011"
+      ],
+      "labels": [
+        "type:epic",
+        "project:crop-scouting"
+      ],
+      "phase": "public-release"
+    },
+    {
+      "id": "CS-013",
+      "title": "Study temporal and spatial robustness",
+      "body": "Output: src/scoring/robustness/ and reports/ablation/. Before implementation, split this epic into four 10h children, redistributing its 40h estimate: held-out failure strata; window comparison; noise sensitivity; accept-or-revert decision. Acceptance: accepted changes improve development behavior without hiding seasonal or geographic failures. Test: run sealed season and county evidence with thresholds frozen before evaluation. Dependencies: CS-012. Complete children in the listed order; each must include its relevant test and evidence in the output directory. Record versions, commands, inputs and limitations. Do not count child estimates again or spend reserve without a milestone decision.",
+      "estimate_hours": 40,
+      "milestone": "M4",
+      "depends_on": [
+        "CS-012"
+      ],
+      "labels": [
+        "type:epic",
+        "project:crop-scouting"
+      ],
+      "phase": "hardening"
+    },
+    {
+      "id": "CS-014",
+      "title": "Harden mask availability and history",
+      "body": "Output: src/preprocess/history.py and reports/history/. Before implementation, split this epic into four 10h children, redistributing its 40h estimate: release-time validation; prior-mask fallback; boundary-change flags; hindsight comparison. Acceptance: operational replay never uses future crop identity and unavailable history produces abstention. Test: test changed crop masks, delayed releases and incomplete observation timelines. Dependencies: CS-010, CS-012. Complete children in the listed order; each must include its relevant test and evidence in the output directory. Record versions, commands, inputs and limitations. Do not count child estimates again or spend reserve without a milestone decision.",
+      "estimate_hours": 40,
+      "milestone": "M4",
+      "depends_on": [
+        "CS-010",
+        "CS-012"
+      ],
+      "labels": [
+        "type:epic",
+        "project:crop-scouting"
+      ],
+      "phase": "hardening"
+    },
+    {
+      "id": "CS-015",
+      "title": "Add bounded provider and cache resilience",
+      "body": "Output: src/adapters/ and docs/data-operations.md. Before implementation, split this epic into four 10h children, redistributing its 40h estimate: provider contract; offline cache loading; retry policy; quota and checksum handling. Acceptance: source outages cannot corrupt completed runs and the generated demo stays functional. Test: test partial downloads, changed checksums, cache exhaustion and provider schema drift. Dependencies: CS-005, CS-012. Complete children in the listed order; each must include its relevant test and evidence in the output directory. Record versions, commands, inputs and limitations. Do not count child estimates again or spend reserve without a milestone decision.",
+      "estimate_hours": 40,
+      "milestone": "M4",
+      "depends_on": [
+        "CS-005",
+        "CS-012"
+      ],
+      "labels": [
+        "type:epic",
+        "project:crop-scouting"
+      ],
+      "phase": "hardening"
+    },
+    {
+      "id": "CS-016",
+      "title": "Package and validate scouting jobs",
+      "body": "Output: deploy/ and reports/workflow/. Before implementation, split this epic into four 10h children, redistributing its 40h estimate: CPU packaging; runtime measurement; three workflow scripts; optional feedback record. Acceptance: users can explain rankings and abstentions while agronomic validity remains explicitly unmeasured. Test: test offline operation, memory limits and interpretations using public or generated examples. Dependencies: CS-013, CS-014, CS-015. Complete children in the listed order; each must include its relevant test and evidence in the output directory. Record versions, commands, inputs and limitations. Do not count child estimates again or spend reserve without a milestone decision.",
+      "estimate_hours": 40,
+      "milestone": "M4",
+      "depends_on": [
+        "CS-013",
+        "CS-014",
+        "CS-015"
+      ],
+      "labels": [
+        "type:epic",
+        "project:crop-scouting"
+      ],
+      "phase": "hardening"
+    },
+    {
+      "id": "CS-017",
+      "title": "Harden raster inputs and audit trails",
+      "body": "Output: tests/security/ and docs/security.md. Before implementation, split this epic into four 8h children, redistributing its 32h estimate: raster size limits; unsafe path rejection; dependency audit; provenance validation. Acceptance: malformed rasters fail safely and source licenses survive all derived exports. Test: test decompression limits, invalid CRS, missing attribution and excessive job submissions. Dependencies: CS-016. Complete children in the listed order; each must include its relevant test and evidence in the output directory. Record versions, commands, inputs and limitations. Do not count child estimates again or spend reserve without a milestone decision.",
+      "estimate_hours": 32,
+      "milestone": "M5",
+      "depends_on": [
+        "CS-016"
+      ],
+      "labels": [
+        "type:epic",
+        "project:crop-scouting"
+      ],
+      "phase": "handoff"
+    },
+    {
+      "id": "CS-018",
+      "title": "Prepare stable release and recovery",
+      "body": "Output: release/v1.0/ and docs/operations.md. Before implementation, split this epic into four 8h children, redistributing its 32h estimate: version packaging; schema migration; backup restoration; rollback rehearsal. Acceptance: restored runs retain their as_of timestamps, baseline versions and exact source references. Test: interrupt cache rebuild and database upgrade then compare restored report hashes. Dependencies: CS-017. Complete children in the listed order; each must include its relevant test and evidence in the output directory. Record versions, commands, inputs and limitations. Do not count child estimates again or spend reserve without a milestone decision.",
+      "estimate_hours": 32,
+      "milestone": "M5",
+      "depends_on": [
+        "CS-017"
+      ],
+      "labels": [
+        "type:epic",
+        "project:crop-scouting"
+      ],
+      "phase": "handoff"
+    },
+    {
+      "id": "CS-019",
+      "title": "Rehearse maintenance and source drift",
+      "body": "Output: reports/maintenance/ and docs/maintenance.md. Before implementation, split this epic into four 7h children, redistributing its 28h estimate: weekly checks; dependency update; source-change triage; generated fixture rebuild. Acceptance: four rehearsals fit budget and changing data availability cannot silently revise past results. Test: rerun frozen public and generated fixtures after a compatible package update. Dependencies: CS-018. Complete children in the listed order; each must include its relevant test and evidence in the output directory. Record versions, commands, inputs and limitations. Do not count child estimates again or spend reserve without a milestone decision.",
+      "estimate_hours": 28,
+      "milestone": "M5",
+      "depends_on": [
+        "CS-018"
+      ],
+      "labels": [
+        "type:epic",
+        "project:crop-scouting"
+      ],
+      "phase": "handoff"
+    },
+    {
+      "id": "CS-020",
+      "title": "Close evidence and product decision",
+      "body": "Output: reports/final/ and docs/next-decision.md. Before implementation, split this epic into four 7h children, redistributing its 28h estimate: budget reconciliation; acceptance audit; claim review; continue-or-stop recommendation. Acceptance: technical completion needs no agronomy partner and commercial utility remains conditional. Test: audit non-diagnostic wording and reproduce the tagged release's complete scouting workflow. Dependencies: CS-019. Complete children in the listed order; each must include its relevant test and evidence in the output directory. Record versions, commands, inputs and limitations. Do not count child estimates again or spend reserve without a milestone decision.",
+      "estimate_hours": 28,
+      "milestone": "M5",
+      "depends_on": [
+        "CS-019"
+      ],
+      "labels": [
+        "type:epic",
+        "project:crop-scouting"
+      ],
+      "phase": "handoff"
+    }
+  ]
+}
